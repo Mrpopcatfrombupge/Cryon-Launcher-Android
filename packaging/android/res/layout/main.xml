@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The launcher's front screen, in Pojav's structure and the SHADOW palette.
+
+  Pojav's home is three zones and it is worth copying that exactly: the account and
+  the way into settings at the top, the list of things you can do in the middle, and
+  at the bottom the two choices that lead to PLAY sitting on a plate of their own,
+  under the thumb. There is no drawer here — Pojav's drawer is the in-game menu, and
+  a launcher that hides its own sections behind a hamburger makes you open it to find
+  out what it can do.
+
+  The colours stay ours: black page, charcoal plate, silver text, one cold accent.
+  Structure from Pojav, identity from us.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow_black">
+
+    <dev.cryon.client.ShadowBackdrop
+        android:id="@+id/backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bar_h"
+            android:background="@drawable/top_scrim"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="6dp">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="@dimen/logo"
+                android:layout_height="@dimen/logo"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logo_cryon_live" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="11dp"
+                android:letterSpacing="0.14"
+                android:text="@string/app_name"
+                android:textColor="@color/shadow_silver"
+                android:textSize="@dimen/text_title" />
+
+            <LinearLayout
+                android:id="@+id/account_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/chip"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@string/label_account"
+                    android:src="@drawable/ic_account" />
+
+                <TextView
+                    android:id="@+id/account_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:maxWidth="120dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/shadow_silver"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/settings_button"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/menu_settings"
+                android:padding="13dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_plate"
+            android:elevation="14dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/instance_row"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/picker_h"
+                android:layout_marginStart="@dimen/play_side"
+                android:layout_marginEnd="@dimen/play_side"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/picker_icon"
+                    android:layout_height="@dimen/picker_icon"
+                    android:contentDescription="@string/label_instance"
+                    android:src="@drawable/ic_instances" />
+
+                <TextView
+                    android:id="@+id/instance_chip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/shadow_silver"
+                    android:textSize="@dimen/text_row" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_caret" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/play_side"
+                android:layout_marginEnd="@dimen/play_side"
+                android:background="@color/shadow_rule" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/picker_h"
+                android:layout_marginStart="@dimen/play_side"
+                android:layout_marginEnd="@dimen/play_side"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/picker_icon"
+                    android:layout_height="@dimen/picker_icon"
+                    android:contentDescription="@string/label_version"
+                    android:src="@drawable/ic_worlds" />
+
+                <TextView
+                    android:id="@+id/version_chip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/shadow_silver"
+                    android:textSize="@dimen/text_row" />
+
+                <ImageButton
+                    android:id="@+id/version_edit"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/label_version"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_edit" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/play"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/play_h"
+                android:layout_marginStart="@dimen/play_side"
+                android:layout_marginEnd="@dimen/play_side"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/play_bottom"
+                android:background="@drawable/play"
+                android:elevation="8dp"
+                android:letterSpacing="0.16"
+                android:text="@string/play"
+                android:textColor="@color/shadow_black"
+                android:textSize="@dimen/text_body"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

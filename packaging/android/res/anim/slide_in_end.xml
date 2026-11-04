@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The sidebar arrives on a decelerating curve: fast out of the edge, settling
+     into place, which is what makes it read as an object rather than a redraw. -->
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromXDelta="100%"
+    android:toXDelta="0%"
+    android:duration="300"
+    android:interpolator="@interpolator/shadow_decelerate" />

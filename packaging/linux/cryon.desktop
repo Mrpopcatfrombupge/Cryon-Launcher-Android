@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Cryon
+Comment=Minecraft: Java Edition 26.3, rewritten in Rust
+Exec=cryon-client
+Icon=cryon
+Terminal=false
+Categories=Game;
+StartupWMClass=horizon
+NoDisplay=true

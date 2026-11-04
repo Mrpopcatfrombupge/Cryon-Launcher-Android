@@ -1,0 +1,33 @@
+[package]
+name = "cryon-client-input"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version = "1.90"
+description = "The client's input layer: key bindings and their names, mouse, controllers, clipboard and window options"
+
+[dependencies]
+cryon-client-core = { path = "../cryon-client-core" }
+winit = "0.30.13"
+# The window icon.
+cryon-theme = { path = "../cryon-theme" }
+png = "0.18"
+# The DualSense's trigger effects (the `controllers` feature).
+cryon-dualsense = { path = "../cryon-dualsense", optional = true }
+
+# arboard has no Android backend, so on Android the game keeps its clipboard in
+# process (see clipboard.rs) and the dependency is not built at all.
+# winit also needs an android-activity backend named here, because this is the
+# crate that uses winit: without it android-activity refuses to build, and winit
+# silently changes `Key::Character`'s string type as a side effect.
+[target.'cfg(target_os = "android")'.dependencies]
+winit = { version = "0.30.13", features = ["android-native-activity"] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+arboard = { version = "3.6.1", default-features = false, features = ["wayland-data-control"] }
+
+[features]
+controllers = ["dep:cryon-dualsense"]
+
+[lints]
+workspace = true

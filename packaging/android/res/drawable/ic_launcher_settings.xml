@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher settings: a phone with a control on it. Distinct from the game's own
+  settings icon, which is a rack of sliders — one screen is about the device, the
+  other about the world, and the row should say which.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="@color/shadow_silver"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M7,2.6 h10 a1.6,1.6 0 0,1 1.6,1.6 v15.6 a1.6,1.6 0 0,1 -1.6,1.6 H7 a1.6,1.6 0 0,1 -1.6,-1.6 V4.2 A1.6,1.6 0 0,1 7,2.6 Z" />
+    <path
+        android:strokeColor="@color/shadow_accent"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M9.2,9.2 H14.8" />
+    <path
+        android:strokeColor="@color/shadow_accent"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M9.2,14.8 H14.8" />
+    <path
+        android:fillColor="@color/shadow_accent"
+        android:pathData="M13.1,9.2 m-1.7,0 a1.7,1.7 0 1,0 3.4,0 a1.7,1.7 0 1,0 -3.4,0" />
+    <path
+        android:fillColor="@color/shadow_silver"
+        android:pathData="M10.9,14.8 m-1.7,0 a1.7,1.7 0 1,0 3.4,0 a1.7,1.7 0 1,0 -3.4,0" />
+</vector>

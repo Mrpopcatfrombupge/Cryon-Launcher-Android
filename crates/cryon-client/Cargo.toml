@@ -1,0 +1,138 @@
+[package]
+name = "cryon-client"
+default-run = "cryon-client"
+autobins = false
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version = "1.90"
+description = "Cryon native client"
+
+# Shipped under the Cryon name; the crate stays cryon-client so every `use
+# cryon_*` path in the workspace keeps resolving.
+[[bin]]
+name = "cryon-client"
+path = "src/main.rs"
+
+[[bin]]
+name = "cryon-ctl"
+path = "src/bin/cryon-ctl/main.rs"
+
+[dependencies]
+cryon-assets = { path = "../cryon-assets" }
+cryon-client-core = { path = "../cryon-client-core" }
+cryon-client-input = { path = "../cryon-client-input" }
+cryon-client-render = { path = "../cryon-client-render" }
+cryon-command = { path = "../cryon-command" }
+cryon-items = { path = "../cryon-items" }
+cryon-core = { path = "../cryon-core" }
+# The server thread ahead of the workers (MinecraftServer.spin's Thread.setPriority).
+cryon-threads = { path = "../cryon-threads" }
+cryon-hdr = { path = "../cryon-hdr" }
+cryon-world = { path = "../cryon-world" }
+cryon-protocol = { path = "../cryon-protocol" }
+# server.properties, eula.txt and the user lists, shared with cryon-server.
+cryon-server-files = { path = "../cryon-server-files" }
+# The dedicated server's anticheat, off unless server.toml's [anticheat] turns it on (docs/anticheat.md).
+cryon-anticheat = { path = "../cryon-anticheat" }
+# The dedicated server's chat filter: [chat_filter], the slur list, mutes (docs/chat-filter.md).
+cryon-chat-filter = { path = "../cryon-chat-filter" }
+# Shader packs: reading them and turning their GLSL into naga modules.
+cryon-shaders = { path = "../cryon-shaders" }
+# Cryon's own shader packs: the format, the stages and the check (docs/shaders.md).
+cryon-shader-api = { path = "../cryon-shader-api" }
+cryon-friends = { path = "../cryon-friends" }
+# The narrator (GameNarrator): text-to-speech of chat, system messages and screens.
+cryon-narrator = { path = "../cryon-narrator" }
+# Cryon mods: sandboxed WebAssembly components, off unless installed and turned on (docs/mods.md).
+# Their runtime is the `mods` feature.
+cryon-mods = { path = "../cryon-mods", default-features = false, features = ["index"] }
+wgpu = { version = "30.0.1", default-features = false, features = ["std", "parking_lot", "vulkan", "metal", "wgsl", "naga-ir"] }
+winit = "0.30.13"
+pollster = "0.4"
+bytemuck = { version = "1.24", features = ["derive"] }
+glam = "0.30"
+png = "0.18"
+sha2 = "0.10.9"
+# Server resource packs are checked and cached by their SHA-1, as vanilla does.
+sha1 = "0.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1.0.151", features = ["raw_value"] }
+# hlsl-out: the gfx.rs tests translate every shader as wgpu's DirectX 12 backend does. A normal feature,
+# not a dev-dependency's, so builds, tests and examples share one build of naga, wgpu and this crate.
+naga = { version = "30.0.1", features = ["wgsl-in", "hlsl-out"] }
+miniz_oxide = "0.8"
+ab_glyph = "0.2.32"
+log = "0.4"
+chrono = { version = "0.4.42", default-features = false, features = ["clock", "std"] }
+flate2 = { version = "1.1.10", default-features = false, features = ["zlib-rs", "runtime_detection"] }
+cryon-theme = { path = "../cryon-theme" }
+# Opt-in data collection: the game keeps, the launcher sends (docs/telemetry.md); `live` is
+# the anonymous "I'm playing" ping the game sends itself (`heartbeat.rs`).
+cryon-telemetry = { path = "../cryon-telemetry", default-features = false, features = ["live"] }
+cryon-bench = { path = "../cryon-bench" }
+zip = { version = "9.1.3", default-features = false, features = ["deflate"] }
+# Controllers (evdev + libudev on Linux, IOKit on macOS, Windows.Gaming.Input); the `controllers` feature.
+gilrs = { version = "0.11", optional = true }
+# The DualSense's rumble, adaptive triggers and lights over HID (gilrs only reads it).
+cryon-dualsense = { path = "../cryon-dualsense", optional = true }
+# HTTPS to the Minecraft services (online-mode session join).
+ureq = { version = "2", default-features = false, features = ["tls"] }
+unicode-bidi = "0.3.18"
+# `LevelStorageAccess.estimateDiskSpace`: usable disk space, without unsafe code on Windows.
+fs4 = { version = "1.1.0", default-features = false, features = ["sync"] }
+
+[target.'cfg(target_os = "android")'.dependencies]
+# android-activity refuses to build without one of its two backends, and winit
+# only forwards the choice. NativeActivity needs nothing but a manifest entry;
+# GameActivity would drag in a Gradle project and its JNI library.
+winit = { version = "0.30.13", features = ["android-native-activity"] }
+
+[target.'cfg(unix)'.dependencies]
+# The server thread's CPU time per tick (`CRYON_SPIKES`, spans.rs).
+rustix = { version = "1", default-features = false, features = ["std", "time", "process", "fs"] }
+
+[target.'cfg(windows)'.dependencies]
+# Use the registered URI handler without routing links through Explorer/cmd.
+open = { version = "5.4.5", features = ["shellexecute-on-windows"] }
+# DirectX 12, where Vulkan has no adapter or device, or by choice (`graphicsApi`, graphics.rs).
+# Shaders compile with FXC (d3dcompiler_47.dll, part of Windows), or DXC when dxcompiler.dll is
+# on the PATH.
+wgpu = { version = "30.0.1", default-features = false, features = ["dx12"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+# OpenGL (WGL on Windows, EGL on Linux), the last fallback, for GPUs with no Vulkan or
+# DirectX 12 driver (`graphicsApi`, graphics.rs).
+wgpu = { version = "30.0.1", default-features = false, features = ["gles"] }
+
+[target.'cfg(windows)'.build-dependencies]
+# The icon resource in the .exe (build.rs).
+winresource = "0.1"
+
+[features]
+default = ["audio", "controllers"]
+# Sound output. Without it (and `controllers`) the program links neither libasound nor libudev on
+# Linux: the server build (`--no-default-features`, released as cryon-engine; docs/server.md).
+audio = ["cryon-client-render/audio"]
+# Controllers: gilrs, and the DualSense's own output. Without it only `cryon-ctl pad`'s virtual pad.
+controllers = ["dep:gilrs", "dep:cryon-dualsense", "cryon-client-input/controllers"]
+# Records the call sites of mob random draws (`mob_ai_probe` traces).
+rng-trace = ["cryon-core/rng-trace"]
+# Compatibility with earlier experiment commands: main already uses mimalloc.
+windows-mimalloc = []
+# Opt-in Windows heap experiment; see docs/windows-allocators.md.
+windows-segment-heap = []
+
+# Its own name, not `probe`: Cargo copies every crate's examples into one target/<profile>/examples.
+[[example]]
+name = "client_probe"
+path = "examples/probe/main.rs"
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+cryon-client-render = { path = "../cryon-client-render", features = ["test-support"] }
+cryon-items = { path = "../cryon-items", features = ["test-support"] }
+# Every WGSL shader translated as wgpu's DirectX 12 backend does (gfx.rs tests).
+naga = { version = "30.0.1", features = ["wgsl-in", "hlsl-out", "msl-out", "spv-out"] }

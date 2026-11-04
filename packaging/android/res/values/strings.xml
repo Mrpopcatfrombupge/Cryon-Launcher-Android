@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cryon</string>
+    <string name="play">PLAY</string>
+    <string name="menu">Menu</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+
+    <string name="label_version">Version</string>
+    <string name="label_instance">Instance</string>
+    <string name="label_account">Account</string>
+    <string name="account_none">Not signed in</string>
+
+    <string name="menu_instances">Instances</string>
+    <string name="menu_settings">Game settings</string>
+    <string name="menu_launcher">Launcher settings</string>
+    <string name="menu_controls">Touch controls</string>
+    <string name="menu_worlds">Worlds</string>
+    <string name="menu_versions">Versions</string>
+    <string name="menu_servers">Servers</string>
+    <string name="menu_mods">Mods and packs</string>
+    <string name="menu_files">File manager</string>
+    <string name="menu_credits">Credits</string>
+
+    <string name="empty_versions">No prepared version on this device. Copy one into Android/data/dev.cryon.client/files/versions.</string>
+    <string name="empty_worlds">No worlds saved in this instance yet.\n\nPress PLAY and the game starts a new one here.</string>
+    <string name="empty_servers">No servers in this instance\'s list yet.\n\nThe game adds them itself: Multiplayer, Add server.</string>
+    <string name="starting">Starting</string>
+    <string name="not_ready">Not ready</string>
+    <string name="ready">Ready</string>
+    <string name="soon">Not built yet</string>
+</resources>

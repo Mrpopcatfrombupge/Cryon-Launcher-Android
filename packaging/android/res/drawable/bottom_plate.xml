@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The strip behind the pickers and PLAY. Pojav puts these on a plate one step
+     lighter than the page so the bottom of the screen reads as the place where you
+     act, distinct from the place where you navigate. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/shadow_panel" />
+    <corners
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp" />
+</shape>

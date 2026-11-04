@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The desktop launcher mark as an adaptive-icon foreground: a cold rim, a silver
+  disc, and the shadow crossing it. Same geometry as the legacy mipmaps, sized to
+  stay inside the 66dp safe zone every launcher masks to.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#FF7AA2C2"
+        android:pathData="M54,22 a32,32 0 1,0 0,64 a32,32 0 1,0 0,-64" />
+    <path
+        android:fillColor="#FFC4C9D1"
+        android:pathData="M54,24 a30,30 0 1,0 0,60 a30,30 0 1,0 0,-60" />
+    <path
+        android:fillColor="@color/cryon_void"
+        android:pathData="M59.8,20 a28.8,28.8 0 1,0 0,57.6 a28.8,28.8 0 1,0 0,-57.6" />
+</vector>

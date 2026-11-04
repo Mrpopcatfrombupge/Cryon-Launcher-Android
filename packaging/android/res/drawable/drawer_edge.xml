@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A thin light along the edge the sidebar ends at, so the panel has a boundary
+     on a black page without needing a border drawn on it. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="0"
+        android:startColor="#668FB4D4"
+        android:endColor="#00000000" />
+</shape>

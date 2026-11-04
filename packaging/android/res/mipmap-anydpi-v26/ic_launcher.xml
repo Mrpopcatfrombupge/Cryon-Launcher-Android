@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive icon: the desktop mark over the launcher's own near-black, which every
+  launcher masks to its own shape. The PNG mipmaps under res/mipmap-* are the
+  same picture for the devices that predate this (API below 26).
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/cryon_void" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>

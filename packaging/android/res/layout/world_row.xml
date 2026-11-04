@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One world: its picture, then what it is called, then the three facts that tell a
+  player whether this is the save they mean — the mode, how long they have been in
+  it, and when they last were. The size is on its own line because it is the number
+  that matters before deleting, and it is the one that takes a moment to work out.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/world_row_h"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/play_side"
+    android:paddingEnd="@dimen/play_side">
+
+    <ImageView
+        android:id="@+id/world_icon"
+        android:layout_width="@dimen/world_thumb"
+        android:layout_height="@dimen/world_thumb"
+        android:background="@drawable/world_frame"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_worlds" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/world_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shadow_silver"
+            android:textSize="@dimen/text_row" />
+
+        <TextView
+            android:id="@+id/world_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shadow_mist"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/world_when"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shadow_faint"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/world_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pad_small"
+        android:letterSpacing="0.08"
+        android:textColor="@color/shadow_accent"
+        android:textSize="@dimen/text_small" />
+</LinearLayout>

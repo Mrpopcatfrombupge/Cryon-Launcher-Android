@@ -1,0 +1,25 @@
+{
+  "minecraft:block": {
+    "default": "minecraft:air",
+    "protocol_id": 3,
+    "entries": {
+      "minecraft:air": { "protocol_id": 0 },
+      "minecraft:copper_golem": { "protocol_id": 1 },
+      "minecraft:stone": { "protocol_id": 2 },
+      "minecraft:dirt": { "protocol_id": 3 }
+    }
+  },
+  "minecraft:item": {
+    "default": "minecraft:air",
+    "protocol_id": 4,
+    "entries": {
+      "minecraft:air": { "protocol_id": 0 },
+      "minecraft:stone": { "protocol_id": 1 }
+    }
+  },
+  "minecraft:spawn_group": {
+    "entries": {
+      "minecraft:monster": { "protocol_id": 0 }
+    }
+  }
+}

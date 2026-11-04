@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SHADOW: black, charcoal and dark grey in layers, silver text, one cold accent
+  used sparingly. Depth comes from the layers and from the shadows under them, not
+  from gradients across whole panels.
+
+  The values are the same nine the desktop launcher and the in-game theme use,
+  deepened: a page that is blacker than its panels, panels blacker than their
+  chips, so the interface reads as stacked objects rather than as a flat image.
+-->
+<resources>
+    <color name="shadow_black">#000000</color>
+    <color name="shadow_void">#060608</color>
+    <color name="shadow_charcoal">#0E0E11</color>
+    <color name="shadow_panel">#15151A</color>
+    <color name="shadow_slate">#1D1D24</color>
+    <color name="shadow_rule">#2A2A33</color>
+
+    <color name="shadow_silver">#E2E8F0</color>
+    <color name="shadow_mist">#ADB7C6</color>
+    <color name="shadow_faint">#909CAA</color>
+
+    <color name="shadow_accent">#8FB4D4</color>
+    <color name="shadow_accent_deep">#4E7796</color>
+    <color name="shadow_glow">#338FB4D4</color>
+
+    <color name="shadow_good">#74B98E</color>
+    <color name="shadow_bad">#C87474</color>
+    <!-- The page behind the sidebar, dark enough to push the sidebar forward. -->
+    <color name="shadow_scrim">#99000000</color>
+
+    <!-- Kept so the launcher icon's own files still resolve; both are the old
+         Cryon values, which the SHADOW palette above replaces everywhere else. -->
+    <color name="cryon_void">#060608</color>
+    <color name="cryon_silver">#C8CCD3</color>
+    <color name="cryon_panel">#15151A</color>
+    <color name="cryon_slate">#1D1D24</color>
+    <color name="cryon_mist">#878D97</color>
+    <color name="cryon_faint">#565B65</color>
+    <color name="cryon_rule">#2A2A33</color>
+    <color name="cryon_accent">#8FB4D4</color>
+    <color name="cryon_accent_press">#4E7796</color>
+    <color name="cryon_good">#74B98E</color>
+    <color name="cryon_bad">#C87474</color>
+    <color name="cryon_scrim">#B3000000</color>
+</resources>

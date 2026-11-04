@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Cryon
+GenericName=Game launcher
+Comment=Install, prepare and play Cryon, Minecraft: Java Edition 26.3 rewritten in Rust
+Exec=cryon-launcher
+Icon=cryon
+Terminal=false
+Categories=Game;
+StartupWMClass=cryon-launcher

@@ -1,0 +1,9 @@
+{
+  "id": "0.2-test",
+  "world_version": 4100,
+  "protocol_version": 102,
+  "resource_pack": "91.0",
+  "data_pack": "101.0",
+  "java_version": 21,
+  "stable": false
+}

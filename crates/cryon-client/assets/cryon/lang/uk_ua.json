@@ -1,0 +1,18 @@
+{
+  "cryon.options.controller": "Геймпад",
+  "cryon.options.vibration": "Вібрація",
+  "cryon.options.adaptive_triggers": "Адаптивні тригери",
+  "cryon.options.lightbar": "Світлова панель",
+  "cryon.options.look_sensitivity": "Чутливість огляду",
+  "cryon.options.invert_x": "Інвертувати огляд по X",
+  "cryon.options.invert_y": "Інвертувати огляд по Y",
+  "cryon.options.sneak_button": "Кнопка присідання",
+  "cryon.options.move_deadzone": "Мертва зона руху",
+  "cryon.options.look_deadzone": "Мертва зона огляду",
+  "cryon.options.button_glyphs": "Значки кнопок",
+  "cryon.options.menu_navigation": "Навігація в меню",
+  "cryon.options.on_screen_keyboard": "Екранна клавіатура",
+  "cryon.multiplayer.finding_friend": "Шукаємо світ друга…",
+  "cryon.loading.opening_world": "Відкриття світу",
+  "cryon.loading.cancelling_world": "Скасування"
+}

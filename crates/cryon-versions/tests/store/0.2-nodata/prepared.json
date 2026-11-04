@@ -1,0 +1,7 @@
+{
+  "version": "0.2-nodata",
+  "pinned": false,
+  "paths": {
+    "reports": "datagen/reports"
+  }
+}

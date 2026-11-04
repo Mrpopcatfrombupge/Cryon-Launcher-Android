@@ -1,0 +1,376 @@
+//! The material stage of Cryon's own shader packs (docs/shaders.md): the pack's `material`
+//! function gives the lit colour of each point of a block's surface, before the alpha test and
+//! fog. Terrain still draws with Cryon's meshes, culling and draw lists; only its pipelines
+//! change. Their shader is the pack's stage (`CheckedStage::source`), then a copy of
+//! terrain.wgsl's terrain section whose names all take a `cryon_terrain_` prefix
+//! (`wgsl_prefix.rs`), then entries that hand the pack what vanilla's `fs_solid` and
+//! `fs_translucent` combine: the texture, the vertex tint, the light levels and the lightmap's
+//! colour. They read the terrain's group 0, the flat draws' group 1 where those run, and the
+//! pack's frame at group 3.
+
+use cryon_shader_api::{check::CheckedStage, stages::GROUP};
+
+use super::native_post::{NativeFrame, present_constants};
+use super::wgsl_prefix::{TERRAIN, prefixed, section};
+
+const PREFIX: &str = "cryon_terrain_";
+
+/// The entries around the pack's `material`: vanilla's vertex work without the lightmap
+/// product, then the material, the alpha test and fog as `fs_solid` and `fs_translucent` do.
+const ENTRIES: &str = "
+struct CryonMaterialOut {
+    @builtin(position) clip: vec4<f32>,
+    @location(0) uv: vec2<f32>,
+    @location(1) @interpolate(flat) layer: u32,
+    @location(2) tint: vec4<f32>,
+    @location(3) light: vec2<f32>,
+    @location(4) lightmap: vec3<f32>,
+    @location(5) position: vec3<f32>,
+    @location(6) spherical: f32,
+    @location(7) cylindrical: f32,
+    @location(8) @interpolate(flat) face: u32,
+    @location(9) @interpolate(flat) fluid_quad: u32,
+    @location(10) @interpolate(flat) emission: f32,
+}
+fn cryon_material_vertex(position: vec3<f32>, uv: vec2<f32>, layer: u32, color: vec4<f32>,
+    light: vec2<u32>, origin: vec3<f32>) -> CryonMaterialOut {
+    let pos = position + origin;
+    var out: CryonMaterialOut;
+    out.clip = cryon_terrain_globals.view_proj * vec4(pos, 1.0);
+    out.uv = uv;
+    out.layer = layer;
+    out.tint = vec4(color.rgb, 1.0);
+    let block = max(f32(light.y), cryon_terrain_dynamic_block_light(pos));
+    let sky = f32(light.x);
+    // 16 per level, 15 levels.
+    out.light = min(vec2(block, sky) / 240.0, vec2(1.0));
+    out.lightmap = cryon_terrain_sample_lightmap(sky / 16.0, block / 16.0).rgb;
+    out.position = pos;
+    out.spherical = length(pos);
+    out.cylindrical = max(length(pos.xz), abs(pos.y));
+    // The colour's alpha byte (mesher.rs's `fluid_face` and `emitting`): a fluid quad's
+    // high nibble is 8 + its face (0..5), every other quad keeps 0xF there; the low nibble
+    // is 15 minus the face's HDR tier. Every corner of a quad carries the same byte, so the
+    // interpolated value rounds back exactly.
+    let flags = u32(round(color.a * 255.0));
+    let high = flags >> 4u;
+    let fluid = high >= 8u && (high & 7u) < 6u;
+    out.face = select(0u, high & 7u, fluid);
+    out.fluid_quad = u32(fluid);
+    // The tier (0 none, 1 low, 2 incandescent, 3 bright, 4 very bright) as how strongly the
+    // face shines: a redstone torch 7/15, a torch 14/15, glowstone 1.
+    let tier = 15u - (flags & 15u);
+    out.emission = select(min(f32(tier) * 7.0 / 15.0, 1.0), 0.0, tier == 0u);
+    return out;
+}
+@vertex fn cryon_material_vs(
+    @location(0) position: vec3<f32>, @location(1) uv: vec2<u32>,
+    @location(2) layer: u32, @location(3) color: vec4<f32>, @location(4) light: vec2<u32>,
+    @location(5) origin: vec4<f32>) -> CryonMaterialOut {
+    return cryon_material_vertex(position, cryon_terrain_terrain_uv(uv, origin.w), layer,
+        color, light, origin.xyz);
+}
+@vertex fn cryon_material_vs_flat(
+    @builtin(vertex_index) vertex: u32,
+    @location(0) position: vec3<f32>, @location(1) uv: vec2<u32>,
+    @location(2) layer: u32, @location(3) color: vec4<f32>, @location(4) light: vec2<u32>
+) -> CryonMaterialOut {
+    let origin = cryon_terrain_slot_origins[cryon_terrain_block_slots[vertex >> 8u]];
+    return cryon_material_vertex(position, cryon_terrain_terrain_uv(uv, origin.w), layer,
+        color, light, origin.xyz);
+}
+fn cryon_material_color(in: CryonMaterialOut, translucent: bool) -> vec4<f32> {
+    let albedo = cryon_terrain_sprite(in.uv, in.layer & 0x7fffu);
+    // Water draws translucent and lava solid, so the pass resolves the fluid kind.
+    let fluid = select(0u, select(2u, 1u, translucent), in.fluid_quad != 0u);
+    let normal = cryon_material_normal(in.position);
+    let tangent = cryon_material_tangent(in.position, in.uv, normal);
+    return material(MaterialInput(albedo, in.tint, in.light, in.lightmap, in.position, in.uv,
+        translucent, cryon_sprite_tags(in.layer & 0x7fffu), in.clip.xy / frame.resolution,
+        in.face, fluid, in.emission, normal, tangent)).color;
+}
+@fragment fn cryon_material_fs_solid(in: CryonMaterialOut) -> @location(0) vec4<f32> {
+    let color = cryon_material_color(in, false);
+    // Bit 15 of the layer marks opaque leaves (forceOpaque): no alpha cutout.
+    if color.a < 0.5 && (in.layer & 0x8000u) == 0u { discard; }
+    return cryon_terrain_apply_fog(vec4(color.rgb, 1.0), in.spherical, in.cylindrical);
+}
+@fragment fn cryon_material_fs_translucent(in: CryonMaterialOut) -> @location(0) vec4<f32> {
+    let color = cryon_material_color(in, true);
+    if color.a < 0.01 { discard; }
+    return cryon_terrain_apply_fog(color, in.spherical, in.cylindrical);
+}
+";
+
+/// What terrain pipelines are built against: the renderer's layouts and constants.
+pub struct TerrainShape<'a> {
+    /// The terrain's group 0.
+    pub globals: &'a wgpu::BindGroupLayout,
+    /// The flat draws' group 1, where they run (`flat.rs`).
+    pub flat: Option<&'a wgpu::BindGroupLayout>,
+    /// terrain.wgsl's `SPRITE_ARRAYS` and `SPRITE_SPLIT`.
+    pub sprites: [f64; 2],
+    /// The world target's colour format.
+    pub format: wgpu::TextureFormat,
+    /// The pack's tags of each tagged sprite layer, as `(layer, bits)`
+    /// (`Manifest::sprite_tags`).
+    pub sprite_tags: &'a [(u32, u32)],
+}
+
+/// The pack's terrain pipelines: solid (with the cutout test) and translucent, for the
+/// renderer's instanced draws and, where they run, its flat ones.
+pub struct NativeMaterial {
+    pub solid: wgpu::RenderPipeline,
+    pub translucent: wgpu::RenderPipeline,
+    pub flat: Option<(wgpu::RenderPipeline, wgpu::RenderPipeline)>,
+}
+
+/// terrain.wgsl's terrain section (its globals, bindings, sampling, lighting and fog), with
+/// every name it declares prefixed.
+fn vanilla_terrain() -> String {
+    prefixed(
+        section(TERRAIN, "struct Globals {", "// Sky (SkyRenderer)"),
+        PREFIX,
+    )
+}
+
+/// `cryon_sprite_tags(layer)`: the bits of `MaterialInput.tags` of each sprite layer.
+fn sprite_tags(tags: &[(u32, u32)]) -> String {
+    let mut out = String::from("fn cryon_sprite_tags(layer: u32) -> u32 {\n    switch layer {\n");
+    let mut tags = tags.to_vec();
+    tags.sort_unstable_by_key(|&(layer, bits)| (bits, layer));
+    for group in tags.chunk_by(|a, b| a.1 == b.1) {
+        let layers: Vec<String> = group.iter().map(|(layer, _)| format!("{layer}u")).collect();
+        out += &format!(
+            "        case {}: {{ return {}u; }}\n",
+            layers.join(", "),
+            group[0].1
+        );
+    }
+    out + "        default: { return 0u; }\n    }\n}\n"
+}
+
+/// The terrain shader for the pack's material stage `source`, with its sprite `tags`.
+fn shader_source(source: &str, tags: &[(u32, u32)]) -> String {
+    format!(
+        "{source}\n// Cryon's terrain (terrain.wgsl)\n{}{}{ENTRIES}",
+        vanilla_terrain(),
+        sprite_tags(tags)
+    )
+}
+
+/// The material's naga module, its errors in the stage's file.
+fn module(stage: &CheckedStage, tags: &[(u32, u32)]) -> Result<naga::Module, String> {
+    let text = shader_source(&stage.source, tags);
+    naga::front::wgsl::parse_str(&text)
+        .map_err(|e| format!("{}: {}", stage.file, e.emit_to_string(&text)))
+}
+
+impl NativeMaterial {
+    /// The pipelines of the pack's material `stage` with the option values `constants`.
+    pub fn new(
+        device: &wgpu::Device,
+        shape: &TerrainShape<'_>,
+        frame: &NativeFrame,
+        stage: &CheckedStage,
+        constants: &[(String, f64)],
+    ) -> Result<Self, String> {
+        let module = module(stage, shape.sprite_tags)?;
+        let mut constants = present_constants(&module, constants);
+        let sprite_names = [
+            "cryon_terrain_SPRITE_ARRAYS",
+            "cryon_terrain_SPRITE_SPLIT",
+        ];
+        constants.extend(sprite_names.into_iter().zip(shape.sprites));
+        let scope = device.push_error_scope(wgpu::ErrorFilter::Validation);
+        let module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some(&stage.label),
+            source: wgpu::ShaderSource::Naga(std::borrow::Cow::Owned(module)),
+        });
+        let layout = |flat: Option<&wgpu::BindGroupLayout>| {
+            let mut groups: [Option<&wgpu::BindGroupLayout>; GROUP as usize + 1] =
+                Default::default();
+            groups[0] = Some(shape.globals);
+            groups[1] = flat;
+            groups[GROUP as usize] = Some(&frame.layout);
+            device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+                label: Some("Native shader pack terrain"),
+                bind_group_layouts: &groups,
+                ..Default::default()
+            })
+        };
+        let instance_attributes = wgpu::vertex_attr_array![5=>Float32x4];
+        let vertices = wgpu::VertexBufferLayout {
+            array_stride: std::mem::size_of::<super::TerrainVertex>() as u64,
+            step_mode: wgpu::VertexStepMode::Vertex,
+            attributes: &super::TERRAIN_ATTRIBUTES,
+        };
+        let instances = wgpu::VertexBufferLayout {
+            array_stride: 16,
+            step_mode: wgpu::VertexStepMode::Instance,
+            attributes: &instance_attributes,
+        };
+        // As the renderer's terrain pipelines (gfx.rs): back faces culled, reversed depth.
+        let pipeline = |layout: &wgpu::PipelineLayout,
+                        vertex: &str,
+                        buffers: &[Option<wgpu::VertexBufferLayout<'_>>],
+                        fragment: &str,
+                        blend: Option<wgpu::BlendState>| {
+            let options = wgpu::PipelineCompilationOptions {
+                constants: &constants,
+                ..Default::default()
+            };
+            device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
+                label: Some(&stage.label),
+                layout: Some(layout),
+                vertex: wgpu::VertexState {
+                    module: &module,
+                    entry_point: Some(vertex),
+                    compilation_options: options.clone(),
+                    buffers,
+                },
+                primitive: wgpu::PrimitiveState {
+                    cull_mode: Some(wgpu::Face::Back),
+                    ..Default::default()
+                },
+                depth_stencil: Some(wgpu::DepthStencilState {
+                    format: wgpu::TextureFormat::Depth32Float,
+                    depth_write_enabled: Some(true),
+                    depth_compare: Some(wgpu::CompareFunction::GreaterEqual),
+                    stencil: Default::default(),
+                    bias: Default::default(),
+                }),
+                multisample: Default::default(),
+                fragment: Some(wgpu::FragmentState {
+                    module: &module,
+                    entry_point: Some(fragment),
+                    compilation_options: options,
+                    targets: &[Some(wgpu::ColorTargetState {
+                        format: shape.format,
+                        blend,
+                        write_mask: wgpu::ColorWrites::ALL,
+                    })],
+                }),
+                multiview_mask: None,
+                cache: None,
+            })
+        };
+        let blend = Some(wgpu::BlendState::ALPHA_BLENDING);
+        let instanced = layout(None);
+        let buffers = [Some(vertices.clone()), Some(instances)];
+        let solid = pipeline(
+            &instanced,
+            "cryon_material_vs",
+            &buffers,
+            "cryon_material_fs_solid",
+            None,
+        );
+        let translucent = pipeline(
+            &instanced,
+            "cryon_material_vs",
+            &buffers,
+            "cryon_material_fs_translucent",
+            blend,
+        );
+        let flat = shape.flat.map(|group| {
+            let layout = layout(Some(group));
+            let buffers = [Some(vertices.clone())];
+            let vs = "cryon_material_vs_flat";
+            (
+                pipeline(&layout, vs, &buffers, "cryon_material_fs_solid", None),
+                pipeline(
+                    &layout,
+                    vs,
+                    &buffers,
+                    "cryon_material_fs_translucent",
+                    blend,
+                ),
+            )
+        });
+        if let Some(e) = pollster::block_on(scope.pop()) {
+            return Err(format!("{}: {e}", stage.file));
+        }
+        Ok(Self {
+            solid,
+            translucent,
+            flat,
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use cryon_shader_api::{MANIFEST, Pack, StageKind, check};
+
+    fn stage(material: &str) -> CheckedStage {
+        let manifest = "schema = 1\nid = \"t\"\nname = \"T\"\nversion = \"1\"\napi = \"0.1\"\n\
+            [material]\nfile = \"material.wgsl\"\n\
+            [[options]]\nid = \"gain\"\nname = \"Gain\"\ntype = \"float\"\n\
+            default = 1.0\nmin = 0.0\nmax = 2.0\n";
+        let files = [(MANIFEST, manifest), ("material.wgsl", material)]
+            .map(|(n, t)| (n.to_owned(), t.as_bytes().to_vec()))
+            .into();
+        let mut report = check(&Pack::from_files(files).unwrap()).unwrap();
+        assert_eq!(report.stages[0].kind, StageKind::Material);
+        report.stages.remove(0)
+    }
+
+    #[test]
+    fn the_terrain_takes_a_prefix_and_validates_with_a_pack() {
+        let terrain = vanilla_terrain();
+        for name in [
+            "Globals",
+            "globals",
+            "sprites_7",
+            "sprite",
+            "SPRITE_SPLIT",
+            "block_slots",
+            "sample_lightmap",
+            "apply_fog",
+        ] {
+            assert!(terrain.contains(&format!("{PREFIX}{name}")), "{name}");
+        }
+        assert!(!terrain.contains("fs_sky"), "the sky stays out");
+        // A pack may use any name Cryon's terrain uses unprefixed.
+        let own = "override gain: f32;\nconst PI: f32 = 3.0;\n\
+            fn sprite(c: vec4<f32>) -> vec4<f32> { return c * PI; }\n\
+            fn apply_fog(c: vec4<f32>) -> vec4<f32> { return c * gain; }\n\
+            fn material(input: MaterialInput) -> Surface {\n    \
+                let lit = input.albedo * input.tint * vec4(input.lightmap, 1.0);\n    \
+                let t = vec2<i32>(input.screen * frame.resolution);\n    \
+                let behind = textureLoad(opaque_color, t, 0) * textureLoad(opaque_depth, t, 0);\n    \
+                let mirrored = textureSampleLevel(reflection, reflection_sampler, input.screen, 0.0);\n    \
+                let kind = f32(input.face + input.fluid) * input.emission * mirrored.a;\n    \
+                let frame_of = vec4(cross(input.normal, input.tangent.xyz) * input.tangent.w, kind);\n    \
+                return Surface(apply_fog(sprite(lit)) + (behind + frame_of) * 0.0);\n}\n";
+        let stage = stage(own);
+        let tags = [(7, 1), (3, 1), (9, 2)];
+        assert!(sprite_tags(&tags).contains("case 3u, 7u: { return 1u; }"));
+        let module = module(&stage, &tags).unwrap();
+        let info = naga::valid::Validator::new(
+            naga::valid::ValidationFlags::all(),
+            naga::valid::Capabilities::all(),
+        )
+        .validate(&module)
+        .unwrap_or_else(|e| panic!("{}", e.emit_to_string(&shader_source(&stage.source, &tags))));
+        let entries: Vec<&str> = module
+            .entry_points
+            .iter()
+            .map(|e| e.name.as_str())
+            .collect();
+        for entry in [
+            "cryon_material_vs",
+            "cryon_material_vs_flat",
+            "cryon_material_fs_solid",
+            "cryon_material_fs_translucent",
+        ] {
+            assert!(entries.contains(&entry), "{entry}");
+        }
+        drop(info);
+        assert_eq!(
+            present_constants(&module, &[("gain".into(), 1.5), ("other".into(), 1.0)]),
+            [("gain", 1.5)]
+        );
+    }
+}

@@ -1,0 +1,18 @@
+[package]
+name = "cryon-versions"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Minecraft versions as runtime data: multi-version packet ids, registries, negotiation and id translation"
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+
+[[bin]]
+name = "cryon-versions"
+path = "src/main.rs"
+
+[lints]
+workspace = true

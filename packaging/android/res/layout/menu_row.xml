@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One menu row, at Pojav's 66sdp with its 30sdp icon: tall enough that a thumb
+     lands without aiming, and wide enough for the label to be read at a glance. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/row_h"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/pad"
+    android:paddingEnd="@dimen/pad">
+
+    <ImageView
+        android:id="@+id/row_icon"
+        android:layout_width="@dimen/menu_icon"
+        android:layout_height="@dimen/menu_icon"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/row_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/menu_icon_gap"
+        android:textColor="@color/shadow_silver"
+        android:textSize="@dimen/text_row" />
+
+    <ImageView
+        android:id="@+id/row_arrow"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:contentDescription="@null"
+        android:rotation="270"
+        android:src="@drawable/ic_caret" />
+</LinearLayout>

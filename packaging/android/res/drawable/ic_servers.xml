@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Servers: a rack of three machines, each with its activity light. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="@color/shadow_silver"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M4,4.4 H20 V9.2 H4 Z M4,14.8 H20 V19.6 H4 Z" />
+    <path
+        android:strokeColor="@color/shadow_mist"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M4,9.2 H20 V14.8 H4 Z" />
+    <path
+        android:fillColor="@color/shadow_accent"
+        android:pathData="M7,6.8 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" />
+    <path
+        android:fillColor="@color/shadow_accent"
+        android:pathData="M7,12 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" />
+    <path
+        android:fillColor="@color/shadow_accent"
+        android:pathData="M7,17.2 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" />
+</vector>

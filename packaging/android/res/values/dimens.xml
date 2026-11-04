@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sizes, in dp, taken from PojavLauncher's own metrics rather than invented: its
+  PLAY is 62sdp tall with 17sdp at each side, its pickers are 52sdp and its menu
+  rows 66sdp. Those numbers are what make it comfortable to use with a thumb, and
+  the earlier engine-drawn screen failed exactly here — it sized itself to the
+  window instead of to a hand.
+-->
+<resources>
+    <dimen name="pad">16dp</dimen>
+    <dimen name="pad_small">8dp</dimen>
+    <dimen name="radius">8dp</dimen>
+
+    <dimen name="bar_h">56dp</dimen>
+    <dimen name="mark">26dp</dimen>
+    <dimen name="logo">30dp</dimen>
+
+    <dimen name="play_h">62dp</dimen>
+    <dimen name="play_side">17dp</dimen>
+    <dimen name="play_bottom">15dp</dimen>
+
+    <dimen name="menu_icon">30dp</dimen>
+    <dimen name="menu_icon_gap">22dp</dimen>
+    <dimen name="picker_icon">26dp</dimen>
+
+    <dimen name="picker_h">52dp</dimen>
+    <dimen name="tab_h">46dp</dimen>
+    <dimen name="row_h">66dp</dimen>
+    <dimen name="drawer_w">280dp</dimen>
+    <dimen name="sheet_w">280dp</dimen>
+
+    <!-- A world row is taller than the rest: it carries the game's own picture of
+         the save, and 64dp is the size that picture is made at. -->
+    <dimen name="world_row_h">82dp</dimen>
+    <dimen name="world_thumb">64dp</dimen>
+
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_row">15sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+</resources>

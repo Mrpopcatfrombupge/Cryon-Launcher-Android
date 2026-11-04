@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The shape every list screen in the launcher shares: a bar to go back from, the
+  instance the list belongs to, an optional second row of choices, the rows, and a
+  line at the bottom saying how many there are.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow_black">
+
+    <dev.cryon.client.ShadowBackdrop
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/bar" />
+
+        <HorizontalScrollView
+            android:id="@+id/instance_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/shadow_charcoal"
+            android:paddingStart="@dimen/play_side"
+            android:paddingEnd="@dimen/play_side"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/instance_strip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/pad_small"
+                android:paddingBottom="@dimen/pad_small" />
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/kind_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/shadow_charcoal"
+            android:paddingStart="@dimen/play_side"
+            android:paddingEnd="@dimen/play_side"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/kind_strip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/pad_small" />
+        </HorizontalScrollView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@color/shadow_rule"
+                android:dividerHeight="1dp" />
+
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingStart="@dimen/play_side"
+                android:paddingEnd="@dimen/play_side"
+                android:textColor="@color/shadow_faint"
+                android:textSize="@dimen/text_body"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/shadow_charcoal"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/shadow_faint"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+</FrameLayout>

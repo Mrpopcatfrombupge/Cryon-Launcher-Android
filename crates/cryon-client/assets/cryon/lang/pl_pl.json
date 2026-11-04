@@ -1,0 +1,18 @@
+{
+  "cryon.options.controller": "Kontroler",
+  "cryon.options.vibration": "Wibracje",
+  "cryon.options.adaptive_triggers": "Adaptacyjne spusty",
+  "cryon.options.lightbar": "Pasek świetlny",
+  "cryon.options.look_sensitivity": "Czułość rozglądania",
+  "cryon.options.invert_x": "Odwróć oś X rozglądania",
+  "cryon.options.invert_y": "Odwróć oś Y rozglądania",
+  "cryon.options.sneak_button": "Przycisk skradania",
+  "cryon.options.move_deadzone": "Martwa strefa ruchu",
+  "cryon.options.look_deadzone": "Martwa strefa rozglądania",
+  "cryon.options.button_glyphs": "Symbole przycisków",
+  "cryon.options.menu_navigation": "Nawigacja po menu",
+  "cryon.options.on_screen_keyboard": "Klawiatura ekranowa",
+  "cryon.multiplayer.finding_friend": "Szukanie świata znajomego…",
+  "cryon.loading.opening_world": "Otwieranie świata",
+  "cryon.loading.cancelling_world": "Anulowanie"
+}

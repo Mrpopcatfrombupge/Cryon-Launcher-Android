@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A picker inside a card: one step lighter than the card it sits in, hairline-rimmed,
+  and the rim goes to the accent under a finger. The layering is the whole idea -
+  page, card, chip - three depths rather than one surface with lines drawn on it.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/shadow_panel" />
+            <stroke android:width="1dp" android:color="@color/shadow_accent" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="@color/shadow_slate"
+                android:endColor="#15151B" />
+            <stroke android:width="1dp" android:color="@color/shadow_rule" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</selector>

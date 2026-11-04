@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Cryon on Android is two activities in one APK.
+
+  `MainActivity` is Java: the launcher's front screen, the settings and the file
+  screens, built from Android's own widgets so the rows are the height a thumb
+  expects. `android.app.NativeActivity` is the game: it loads
+  libcryon_client_android.so and knows nothing about Java. The first starts the
+  second, and the only message between them is `files/env.txt`, which the game
+  reads before it opens a window.
+
+  hasCode is no longer false, because there is code now. The game's activity is
+  still the platform's own class, so the engine needs nothing from the dex.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="dev.cryon.client"
+          android:versionCode="3"
+          android:versionName="0.1.0">
+
+    <!--
+      The floor is what the binary is actually linked against, not the oldest
+      number that compiles: `libcryon_client_android.so` carries a hard DT_NEEDED
+      for libaaudio.so, so a 21 device would be offered an app it cannot load.
+    -->
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34"/>
+
+    <!-- The renderer asks wgpu for Vulkan first and falls back to GLES 3.1. -->
+    <uses-feature android:glEsVersion="0x00030001" android:required="false"/>
+    <uses-feature android:name="android.hardware.vulkan.version" android:required="false"/>
+    <uses-feature android:name="android.hardware.touchscreen" android:required="true"/>
+    <uses-feature android:name="android.hardware.gamepad" android:required="false"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- The self-update hands the downloaded APK to PackageInstaller. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <!--
+      Only to ask whether the network in use counts the bytes, before a 600 MB download
+      starts on it. It is the permission that lets an app read its own connectivity, and
+      nothing here reads anything else with it.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--
+      No storage permissions: the game writes only its own
+      Android/data/dev.cryon.client/files, which has needed no permission since
+      API 19, and nothing asks for these at runtime.
+    -->
+
+    <application
+        android:label="Cryon"
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:theme="@style/Cryon.Launcher"
+        android:extractNativeLibs="true">
+
+        <!-- The screen you land on. Portrait, because it is read top to bottom. -->
+        <activity
+            android:name=".MainActivity"
+            android:label="Cryon"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/menu_settings"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".InstancesActivity"
+            android:label="@string/menu_instances"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <!--
+          The worlds. Portrait like the launcher it belongs to: a list of saves is
+          read top to bottom, and the pictures are square.
+        -->
+        <activity
+            android:name=".WorldsActivity"
+            android:label="@string/menu_worlds"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".VersionsActivity"
+            android:label="@string/menu_versions"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".ServersActivity"
+            android:label="@string/menu_servers"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".ModsActivity"
+            android:process=":porter"
+            android:label="@string/menu_mods"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".FilesActivity"
+            android:label="@string/menu_files"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <activity
+            android:name=".CreditsActivity"
+            android:label="@string/menu_credits"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <!--
+          The control editor, sideways: the game is played in landscape with two
+          thumbs, so the screen that arranges its buttons is the same shape as the
+          game and shows the same positions.
+        -->
+        <activity
+            android:name=".ControlsActivity"
+            android:label="@string/menu_controls"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/Cryon.Launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|density|uiMode"/>
+
+        <!--
+          The game. No intent filter: it is started by the launcher, and the icon
+          on the home screen belongs to the launcher, not to a bare renderer.
+          Still exported, so `adb shell am start` can bring it up on its own when
+          the launcher is the thing being tested.
+        -->        <activity
+            android:name="android.app.NativeActivity"
+            android:label="Cryon"
+            android:exported="true"
+            android:immersive="true"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cryon"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout|density|uiMode|navigation|touchscreen|locale|layoutDirection|fontScale">
+
+            <meta-data android:name="android.app.lib_name" android:value="cryon_client_android"/>
+        </activity>
+    </application>
+</manifest>

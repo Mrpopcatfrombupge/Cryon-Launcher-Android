@@ -1,0 +1,16 @@
+{
+  "handshake": {
+    "serverbound": {
+      "minecraft:intention": { "protocol_id": 0 }
+    }
+  },
+  "play": {
+    "clientbound": {
+      "minecraft:keep_alive": { "protocol_id": 0 },
+      "minecraft:spawn_entity": { "protocol_id": 2 }
+    },
+    "serverbound": {
+      "minecraft:swing": { "protocol_id": 5 }
+    }
+  }
+}

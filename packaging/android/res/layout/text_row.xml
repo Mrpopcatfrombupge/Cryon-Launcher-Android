@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The row the launcher's lists share: a mark, a title, one line of detail, and a
+  state at the right edge. Servers, mods, packs and files all have exactly this
+  much worth saying, and a row that is the same shape everywhere is a row a thumb
+  learns once.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/row_h"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/play_side"
+    android:paddingEnd="@dimen/play_side">
+
+    <ImageView
+        android:id="@+id/row_mark"
+        android:layout_width="@dimen/picker_icon"
+        android:layout_height="@dimen/picker_icon"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/menu_icon_gap"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/row_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/shadow_silver"
+            android:textSize="@dimen/text_row" />
+
+        <TextView
+            android:id="@+id/row_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/shadow_mist"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/row_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pad_small"
+        android:letterSpacing="0.08"
+        android:textColor="@color/shadow_accent"
+        android:textSize="@dimen/text_small" />
+</LinearLayout>

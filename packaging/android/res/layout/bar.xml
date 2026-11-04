@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The bar every screen but the first starts with: back on the left, the name of
+     the screen beside it. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bar_h"
+    android:background="@color/cryon_panel"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="@dimen/bar_h"
+        android:layout_height="@dimen/bar_h"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/back"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_back" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/cryon_silver"
+        android:textSize="@dimen/text_title" />
+</LinearLayout>

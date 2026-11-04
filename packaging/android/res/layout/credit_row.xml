@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One credit: the project, and in two sentences what it contributed. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:minHeight="@dimen/row_h"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/play_side"
+    android:paddingEnd="@dimen/play_side"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp">
+
+    <ImageView
+        android:id="@+id/credit_mark"
+        android:layout_width="@dimen/picker_icon"
+        android:layout_height="@dimen/picker_icon"
+        android:layout_marginTop="2dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/menu_icon_gap"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/credit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shadow_silver"
+            android:textSize="@dimen/text_row" />
+
+        <TextView
+            android:id="@+id/credit_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/shadow_mist"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
+</LinearLayout>

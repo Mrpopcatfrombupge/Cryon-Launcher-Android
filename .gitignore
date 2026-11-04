@@ -1,0 +1,46 @@
+/.local/
+/target/
+**/__pycache__/
+*.py[cod]
+/.venv/
+# Downloaded/decompiled game content and private profiling artifacts.
+*.jar
+*.class
+*.jfr
+*.hprof
+/decompiled/
+/minecraft/
+/assets/
+/run/
+/logs/
+/dist/
+/mods/horizon/build/
+/saves/
+/backups/
+/tools/logs/
+.DS_Store
+# What the client writes to its working directory when run from the repo root.
+/options.txt
+/debug-profile.json
+/cryon.txt
+/cryon-graphics.txt
+/cryon-controller.txt
+/cryon-extras.txt
+/cryon-player.txt
+/servers.dat
+/screenshots/
+/.cryon-cache/
+/crash-reports/
+/debug/
+
+# Release-only compiled original exporter bundle.
+/exporters/
+
+# Local tool caches and agent notes
+/.local/
+/.claude/
+/.workbuddy-ai/
+*.keystore
+
+# APK packaging outputs (releases ship via GitHub Releases)
+packaging/android/out/

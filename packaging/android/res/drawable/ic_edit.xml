@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Edit: a pencil. Beside a picker, the way Pojav puts an edit button next to the
+     profile row so a name can be changed without leaving the screen. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="@color/shadow_silver"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M4.6,19.4 L8.2,18.4 L19.1,7.5 A1.5,1.5 0 0,0 17,5.4 L6.1,16.3 Z" />
+    <path
+        android:strokeColor="@color/shadow_mist"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M14.6,7.9 L16.7,10" />
+</vector>

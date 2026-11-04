@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A pack: sheets stacked, the top one marked. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="@color/shadow_faint"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M4.6,8.6 L12,4.4 L19.4,8.6 L12,12.8 Z" />
+    <path
+        android:strokeColor="@color/shadow_mist"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M4.6,12.6 L12,16.8 L19.4,12.6" />
+    <path
+        android:strokeColor="@color/shadow_accent"
+        android:strokeWidth="1.7"
+        android:strokeLineJoin="round"
+        android:pathData="M4.6,16.4 L12,20.6 L19.4,16.4" />
+</vector>

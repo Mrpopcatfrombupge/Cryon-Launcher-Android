@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The instances, on the same moving shadow as the rest of the launcher. A list
+  rather than a grid: an instance is a thing you choose one of, and the name and
+  which one is running are the only two facts that matter about it.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow_black">
+
+    <dev.cryon.client.ShadowBackdrop
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/bar" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@color/shadow_rule"
+            android:dividerHeight="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/shadow_panel"
+            android:orientation="horizontal"
+            android:padding="@dimen/pad_small">
+
+            <Button
+                android:id="@+id/new_instance"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/picker_h"
+                android:layout_weight="1"
+                android:background="@drawable/play"
+                android:elevation="6dp"
+                android:textAllCaps="false"
+                android:textColor="@color/shadow_black"
+                android:textSize="@dimen/text_row"
+                android:text="New instance" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

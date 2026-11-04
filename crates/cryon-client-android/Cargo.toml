@@ -1,0 +1,27 @@
+[package]
+name = "cryon-client-android"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "Android entry point for the Cryon client: the NativeActivity shim that hands the game the app handle"
+
+[lib]
+name = "cryon_client_android"
+# Android loads the game as a shared library; there is no executable to run.
+# `lib` is kept so the shim can be unit-tested off-device.
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+cryon-client = { path = "../cryon-client", default-features = false, features = ["audio"] }
+cryon-client-input = { path = "../cryon-client-input" }
+cryon-port-pack = { path = "../cryon-port-pack" }
+serde_json = "1"
+android-activity = { version = "0.6.1", features = ["native-activity"] }
+log = { version = "0.4", features = ["std"] }
+
+# Turning the screen is `Activity.setRequestedOrientation`, which exists only on
+# the Java side: there is no C or Rust entry point for it. This crate is the one
+# place in the game that already makes foreign calls, so the JNI that reaches the
+# activity lives here and the crates below keep `forbid(unsafe_code)`.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.22"

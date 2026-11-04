@@ -1,0 +1,9 @@
+{
+  "id": "0.4-nopackets",
+  "world_version": 4300,
+  "protocol_version": 103,
+  "resource_pack": "32",
+  "data_pack": "41",
+  "java_version": 21,
+  "stable": true
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The drawer slides in from the right, so only its left edge is round. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/cryon_panel" />
+    <corners
+        android:topLeftRadius="@dimen/radius"
+        android:bottomLeftRadius="@dimen/radius" />
+</shape>

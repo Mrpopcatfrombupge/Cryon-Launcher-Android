@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One instance's name in the strip above the worlds. The chosen one gets the chip
+  background and the accent; the others are plain text, so the strip reads as one
+  choice rather than a row of buttons competing for attention.
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/instance_label"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_marginEnd="@dimen/pad_small"
+    android:gravity="center"
+    android:letterSpacing="0.06"
+    android:maxLines="1"
+    android:paddingStart="18dp"
+    android:paddingEnd="18dp"
+    android:textAllCaps="true"
+    android:textSize="@dimen/text_small" />

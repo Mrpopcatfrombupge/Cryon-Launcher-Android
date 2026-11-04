@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Our own curves rather than the framework's named ones: aapt on this SDK does
+     not resolve @android:interpolator/* , and a curve that has to be found is
+     worth less than one that is simply here. -->
+<decelerateInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:factor="1.6" />

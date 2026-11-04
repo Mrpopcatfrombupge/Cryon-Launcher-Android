@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Two themes, one per half of the app: the launcher you read and the game you
+  play.
+
+  The game's theme is where the whole fullscreen story is declared. The engine
+  draws into the platform's NativeActivity and asks for nothing at the window
+  level, so it has to be said here: `NoActionBar.Fullscreen` drops the status
+  bar, the transparent bar colours stop the system painting its own bands over
+  the top and bottom, `fitsSystemWindows=false` lets the renderer own the full
+  surface, and `shortEdges` is what keeps the notch and the camera pill from
+  being answered with black side bars on a phone that has them. The navigation
+  bars go at runtime, through WindowInsetsController, because
+  `View.setSystemUiVisibility` is ignored from Android 11 on.
+-->
+<resources>
+    <style name="Cryon" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:keepScreenOn">true</item>
+    </style>
+
+    <!--
+      The launcher's own theme. It is not fullscreen and it does not ask for the
+      cutout, because a screen you read and tap has to sit under the clock rather
+      than behind it: the brand row would otherwise start at the camera pill. The
+      game keeps the theme above, where the renderer does want every pixel and the
+      bars are hidden at runtime instead.
+    -->
+    <style name="Cryon.Launcher" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowBackground">@color/shadow_black</item>
+        <!--
+            The bars are left transparent on purpose. The moving shadow behind the
+            page runs the whole height of the window, so the status bar area is
+            lit by the same thing as the rest of the screen instead of by a band
+            of colour the system painted over it.
+        -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:colorAccent">@color/shadow_accent</item>
+        <item name="android:alertDialogTheme">@style/Cryon.Dialog</item>
+        <item name="android:windowAnimationStyle">@style/Cryon.Screen</item>
+    </style>
+
+    <!--
+      A dialog takes its colours from its own theme, not the screen that opened it,
+      so without this the version picker and the settings choices come up in the
+      system's purple beside a page that is ours in every other way.
+    -->
+    <style name="Cryon.Dialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
+        <item name="android:colorAccent">@color/shadow_accent</item>
+        <item name="android:colorBackground">@color/shadow_panel</item>
+        <item name="android:textColorPrimary">@color/shadow_silver</item>
+    </style>
+
+    <!-- The default way between this app's screens, for the cases the activities
+         do not name themselves. -->
+    <style name="Cryon.Screen" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/enter_rise</item>
+        <item name="android:activityOpenExitAnimation">@anim/exit_sink</item>
+        <item name="android:activityCloseEnterAnimation">@anim/enter_rise</item>
+        <item name="android:activityCloseExitAnimation">@anim/exit_sink</item>
+    </style>
+</resources>

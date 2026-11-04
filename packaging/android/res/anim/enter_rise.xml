@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Switching category: the new screen rises a few points out of the dark while it
+  fades in, and the old one sinks while it fades out. Small, and only once per
+  move — a transition you notice is a transition that has interrupted you.
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@interpolator/shadow_decelerate">
+    <alpha
+        android:fromAlpha="0"
+        android:toAlpha="1"
+        android:duration="260" />
+    <translate
+        android:fromYDelta="7%"
+        android:toYDelta="0%"
+        android:duration="260" />
+</set>

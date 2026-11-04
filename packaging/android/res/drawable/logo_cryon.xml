@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Cryon mark: a C cut like ice — one continuous angular stroke, opening to
+  the right, with a single facet of the accent colour where light would catch
+  the top terminal. Built from straight runs and mitres on purpose: curves and
+  gradients blur at the 30 dp this renders at, and straight edges stay sharp
+  down to a launcher row.
+
+  The construction is one polyline, so the mark cannot fall apart if a font
+  substitution or a mask trims it. The named groups are what logo_cryon_live
+  animates; the names must match exactly, because an animated-vector silently
+  ignores a target it cannot find.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+
+    <group android:name="mark">
+        <path
+            android:strokeColor="@color/shadow_silver"
+            android:strokeWidth="7.2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:pathData="M40,16 L24,16 L15,25 L15,31 L24,40 L40,40" />
+    </group>
+
+    <group
+        android:name="facet"
+        android:alpha="1.0">
+        <path
+            android:strokeColor="@color/shadow_accent"
+            android:strokeWidth="7.2"
+            android:strokeLineCap="butt"
+            android:pathData="M40,16 L34.5,16" />
+    </group>
+</vector>

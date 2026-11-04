@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One instance: its name, and whether it is the one that will run. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/row_h"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/pad"
+    android:paddingEnd="@dimen/pad">
+
+    <TextView
+        android:id="@+id/instance_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/shadow_silver"
+        android:textSize="@dimen/text_row" />
+
+    <TextView
+        android:id="@+id/instance_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.08"
+        android:textColor="@color/shadow_accent"
+        android:textSize="@dimen/text_small" />
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The mark alive. The facet breathes — the accent terminal of the C brightens
+  and dims on its own period, the way light catches ice — and it runs in
+  reverse rather than restarting, so the drift never snaps back to where it
+  began. Slow and small on purpose: a logo that twitches asks to be looked at,
+  and this one should only ever be looked past.
+
+  The target names must match the group names in logo_cryon.xml exactly — an
+  animated-vector silently ignores a target it cannot find, which shows up as a
+  still image rather than an error.
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/logo_cryon">
+
+    <target android:name="facet">
+        <objectAnimator
+            android:propertyName="alpha"
+            android:valueFrom="0.45"
+            android:valueTo="1.0"
+            android:duration="4210"
+            android:repeatCount="infinite"
+            android:repeatMode="reverse"
+            android:interpolator="@interpolator/shadow_decelerate" />
+    </target>
+</animated-vector>

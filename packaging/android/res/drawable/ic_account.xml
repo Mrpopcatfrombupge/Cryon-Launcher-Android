@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The account. A head and shoulders, because the row it sits in is a person and
+     not a setting. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="@color/shadow_silver"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M12,8.4 m-3.4,0 a3.4,3.4 0 1,0 6.8,0 a3.4,3.4 0 1,0 -6.8,0" />
+    <path
+        android:strokeColor="@color/shadow_silver"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M4.8,20 C5.6,16.2 8.4,14.4 12,14.4 C15.6,14.4 18.4,16.2 19.2,20" />
+</vector>

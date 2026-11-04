@@ -1,0 +1,15 @@
+[package]
+name = "cryon-command"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version = "1.90"
+description = "Commands (Brigadier): the vanilla command tree, argument types, selectors, parsing, suggestions and the network form of the tree"
+
+[dependencies]
+cryon-client-core = { path = "../cryon-client-core" }
+cryon-protocol = { path = "../cryon-protocol" }
+cryon-world = { path = "../cryon-world" }
+
+[lints]
+workspace = true
